@@ -1,4 +1,5 @@
 import { execSync } from "child_process";
+import path from "path";
 
 export const resetIdentities = () => {
   deleteIdentity();
@@ -12,7 +13,11 @@ export const deleteIdentity = () => {
 };
 
 export const createIdentity = () => {
+  const identityPath = path.resolve(
+    __dirname,
+    "../../docker/kratos/identity.json",
+  );
   execSync(
-    'curl --silent -H "Content-Type: application/json" -X POST "http://localhost:4434/admin/identities" -d @../docker/kratos/identity.json',
+    `curl --silent -H "Content-Type: application/json" -X POST "http://localhost:4434/admin/identities" -d @${identityPath}`,
   );
 };
