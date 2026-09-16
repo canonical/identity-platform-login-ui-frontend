@@ -100,12 +100,18 @@ npx playwright test
 
 - **Tear down the test stack and remove volumes:**
   ```bash
-  docker-compose down -v
+  docker compose down -v
   ```
 
 ---
 
 ## 🔍 Troubleshooting & Common Issues
+
+- **`docker run: Conflict. The container name "/oidc_client" is already in use` when re-running script 03:**
+    - If you re-run `./tests/scripts/03-start-oidc-app.sh` without tearing down the stack, remove the old client container first:
+      ```bash
+      docker rm -f oidc_client
+      ```
 
 - **`Sign in failed: An error occurred` during login:**
     - Verify Traefik routing in `docker/traefik/login-ui-routes.yml`. Traefik must include `PathPrefix('/api/kratos')` routed to `http://identity-platform-login-ui:4455`.
