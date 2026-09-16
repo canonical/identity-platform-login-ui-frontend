@@ -1,0 +1,74 @@
+name: CI Checks & E2E Testing
+
+on:
+  push:
+    branches: [ main, master, feat/* ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint-and-build:
+    name: Lint & Next.js Export Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Build Next.js Static Export
+        run: npm run build
+
+  e2e-tests:
+    name: Playwright End-to-End Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y oathtool
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers & Dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Boot Backend Cluster
+        run: ./tests/scripts/01-start-cluster.sh
+
+      - name: Start Frontend & API Containers
+        run: ./tests/scripts/02-start-ui.sh
+
+      - name: Register OIDC App
+        run: ./tests/scripts/03-start-oidc-app.sh
+
+      - name: Run Playwright E2E Tests
+        run: npx playwright test
+
+      - name: Upload Test Report & Artifacts on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
