@@ -16,6 +16,14 @@ http:
         - sidecar-replace-path-regex-login-ui
       service: login-ui-public-api-service
 
+    # /api/kratos
+    login-ui-public-api-router-api-kratos:
+      entryPoints:
+        - web
+        - websecure
+      rule: "PathPrefix(`/api/kratos`)"
+      service: login-ui-public-api-service
+
     # /api/hydra
     login-ui-public-api-router-api-hydra:
       entryPoints:
@@ -68,7 +76,7 @@ http:
     login-ui-public-api-service:
       loadBalancer:
         servers:
-          - url: "http://172.17.0.1:4455"
+          - url: "http://identity-platform-login-ui:4455"
     frontend-ui-service:
       loadBalancer:
         servers:
