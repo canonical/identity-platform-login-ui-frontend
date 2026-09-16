@@ -17,7 +17,7 @@ services:
       - OPENFGA_API_SCHEME=http
       - OPENFGA_API_HOST=openfga:8080
       - OPENFGA_STORE_ID=01GP1254CHWJC1MNGVB0WDG1T0
-      - IDENTIFIER_FIRST_ENABLED=false
+      - IDENTIFIER_FIRST_ENABLED=true
       - MULTI_TENANCY_ENABLED=false
     ports:
       - "4455:4455"
