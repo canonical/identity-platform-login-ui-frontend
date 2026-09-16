@@ -9,7 +9,14 @@ export const userPassLogin = async (
   password: string = USER_PASSWORD,
 ) => {
   await page.getByLabel("Email").fill(email);
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
+
+  const continueBtn = page.getByRole("button", {
+    name: "Continue",
+    exact: true,
+  });
+  if (await continueBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+    await continueBtn.click();
+  }
 
   const passwordInput = page.getByRole("textbox", { name: "Password" });
   await expect(passwordInput).toBeVisible();
