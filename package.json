@@ -22,7 +22,10 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint .",
-    "fix-lint": "eslint . --fix"
+    "fix-lint": "eslint . --fix",
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "browserslist": {
     "production": [

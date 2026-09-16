@@ -3,7 +3,10 @@
 set -x
 set -e
 
-HYDRA_CONTAINER_ID=$(docker ps -aqf "name=identity-platform-login-ui-hydra-1")
+HYDRA_CONTAINER_ID=$(docker compose -f docker-compose.dev.yml ps -q hydra)
+if [ -z "$HYDRA_CONTAINER_ID" ]; then
+  HYDRA_CONTAINER_ID=$(docker ps -aqf "name=hydra")
+fi
 # TODO: Parse docker-compose.dev.yml to get the hydra image
 HYDRA_IMAGE=ghcr.io/canonical/hydra:2.2.0-canonical
 
