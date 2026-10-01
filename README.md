@@ -45,6 +45,16 @@ To start the built production application:
 npm run start
 ```
 
+## Release Bundles
+
+Whenever a new release is published on GitHub, a GitHub Actions workflow automatically compiles the static UI build via `make build` and attaches the output bundle `login-ui-frontend-bundle.zip` as a release asset.
+
+The latest compiled bundle can always be downloaded from the fixed public URL:
+
+```bash
+curl -L -O https://github.com/canonical/identity-platform-login-ui-frontend/releases/latest/download/login-ui-frontend-bundle.zip
+```
+
 ## Code Quality & Linting
 
 Run ESLint to check for code quality and style issues:
