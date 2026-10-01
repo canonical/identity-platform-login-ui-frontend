@@ -1,0 +1,37 @@
+name: Release Build & Asset Upload
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release-build:
+    name: Build UI and Upload Release Asset
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Build UI via Makefile
+        run: make build
+
+      - name: Package dist directory
+        run: zip -r login-ui-frontend-bundle.zip dist
+
+      - name: Upload Asset to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: login-ui-frontend-bundle.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
